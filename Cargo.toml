@@ -1,0 +1,32 @@
+[package]
+name = "wgpu-template"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[features]
+default = []
+# turn on when compiling for browsers while waiting for webgpu
+# to get proper support
+webgl = ["wgpu/webgl"]
+
+[dependencies]
+winit = { git = "https://github.com/richerfu/winit.git", branch = "feat-ohos-30", default-features = false, features = [
+    "rwh_06",
+] }
+env_logger = { version = "0.11.5" }
+log = { version = "0.4.22" }
+wgpu = { git = "https://github.com/richerfu/wgpu.git", branch = "master" }
+pollster = { version = "0.4.0" }
+openharmony-ability-derive = { version = "0.0.1" }
+openharmony-ability = { version = "0.0.2" }
+
+[patch.crates-io]
+ash = { git = "https://github.com/ash-rs/ash.git", branch = "master" }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+console_error_panic_hook = "0.1.7"
+console_log = "1.0"
+wasm-bindgen-futures = "0.4.49"
