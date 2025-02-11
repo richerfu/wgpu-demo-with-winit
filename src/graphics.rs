@@ -12,13 +12,13 @@ pub type Rc<T> = std::rc::Rc<T>;
 pub type Rc<T> = std::sync::Arc<T>;
 
 pub async fn create_graphics(window: Rc<Window>, proxy: EventLoopProxy<Graphics>) {
-    // let wids = wgpu::InstanceDescriptor {
-    //     backends: wgpu::Backends::GL, // 指定只使用 OpenGL/GLES 后端
-    //     flags: Default::default(),
-    //     backend_options: Default::default()
-    // };
-    // let instance = Instance::new(&wids);
-    let instance = Instance::default();
+    let wids = wgpu::InstanceDescriptor {
+        backends: wgpu::Backends::GL, // 指定只使用 OpenGL/GLES 后端
+        flags: Default::default(),
+        backend_options: Default::default()
+    };
+    let instance = Instance::new(&wids);
+    // let instance = Instance::default();
     let w =  Rc::clone(&window);
     let surface = instance.create_surface(w).unwrap();
     let adapter = instance

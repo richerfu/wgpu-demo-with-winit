@@ -18,10 +18,11 @@ winit = { git = "https://github.com/richerfu/winit.git", branch = "feat-ohos-30"
 ] }
 env_logger = { version = "0.11.5" }
 log = { version = "0.4.22" }
-wgpu = { git = "https://github.com/richerfu/wgpu.git", branch = "master" }
+wgpu = { git = "https://github.com/richerfu/wgpu.git", branch = "trunk" }
 pollster = { version = "0.4.0" }
 openharmony-ability-derive = { version = "0.0.1" }
 openharmony-ability = { version = "0.0.2" }
+napi-ohos = {version = "1.0"}
 
 [patch.crates-io]
 ash = { git = "https://github.com/ash-rs/ash.git", branch = "master" }
