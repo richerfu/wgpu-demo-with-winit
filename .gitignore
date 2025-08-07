@@ -3,3 +3,5 @@
 /.helix
 
 *.so
+
+.DS_Store

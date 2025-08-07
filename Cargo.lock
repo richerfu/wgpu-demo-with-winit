@@ -489,7 +489,7 @@ dependencies = [
 [[package]]
 name = "dpi"
 version = "0.1.1"
-source = "git+https://github.com/richerfu/winit.git?branch=feat-ohos-3x#3242bf41c7fe33254c99a2a9b44ec83dff4313a6"
+source = "git+https://github.com/richerfu/winit.git?branch=feat-ohos-3x#aaa91898c947723c7e5b33162f07e96c6ee0deb7"
 
 [[package]]
 name = "dtor"
@@ -2550,7 +2550,7 @@ checksum = "271414315aff87387382ec3d271b52d7ae78726f5d44ac98b4f4030c91880486"
 [[package]]
 name = "winit"
 version = "0.30.9"
-source = "git+https://github.com/richerfu/winit.git?branch=feat-ohos-3x#3242bf41c7fe33254c99a2a9b44ec83dff4313a6"
+source = "git+https://github.com/richerfu/winit.git?branch=feat-ohos-3x#aaa91898c947723c7e5b33162f07e96c6ee0deb7"
 dependencies = [
  "android-activity",
  "atomic-waker",

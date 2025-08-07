@@ -16,6 +16,7 @@ webgl = ["wgpu/webgl"]
 winit = { git = "https://github.com/richerfu/winit.git", branch = "feat-ohos-3x", default-features = false, features = [
     "rwh_06",
 ] }
+
 env_logger = { version = "0.11.5" }
 log = { version = "0.4.22" }
 wgpu = { git = "https://github.com/richerfu/wgpu.git", branch = "trunk" }
