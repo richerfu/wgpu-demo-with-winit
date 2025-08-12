@@ -1,7 +1,11 @@
-use std::borrow::Cow;
+use std::{borrow::Cow, sync::mpsc};
 
 use wgpu::{
-    util::RenderEncoder, wgc::instance, Adapter, Color, CommandEncoderDescriptor, Device, DeviceDescriptor, Features, FragmentState, Instance, Limits, LoadOp, MemoryHints, Operations, PowerPreference, Queue, RenderPassColorAttachment, RenderPassDescriptor, RenderPipeline, RenderPipelineDescriptor, RequestAdapterOptions, ShaderModuleDescriptor, ShaderSource, StoreOp, Surface, SurfaceConfiguration, TextureFormat, TextureViewDescriptor, VertexState
+    util::RenderEncoder, wgc::instance, Adapter, Color, CommandEncoderDescriptor, Device,
+    DeviceDescriptor, Features, FragmentState, Instance, Limits, LoadOp, MemoryHints, Operations,
+    PowerPreference, Queue, RenderPassColorAttachment, RenderPassDescriptor, RenderPipeline,
+    RenderPipelineDescriptor, RequestAdapterOptions, ShaderModuleDescriptor, ShaderSource, StoreOp,
+    Surface, SurfaceConfiguration, TextureFormat, TextureViewDescriptor, VertexState,
 };
 use winit::{dpi::PhysicalSize, event_loop::EventLoopProxy, window::Window};
 
@@ -11,15 +15,19 @@ pub type Rc<T> = std::rc::Rc<T>;
 #[cfg(not(target_arch = "wasm32"))]
 pub type Rc<T> = std::sync::Arc<T>;
 
-pub async fn create_graphics(window: Rc<Window>, proxy: EventLoopProxy<Graphics>) {
+pub async fn create_graphics(
+    window: Rc<Box<dyn Window>>,
+    proxy: EventLoopProxy,
+    sender: mpsc::Sender<Graphics>,
+) {
     let wids = wgpu::InstanceDescriptor {
         backends: wgpu::Backends::GL, // 指定只使用 OpenGL/GLES 后端
         flags: Default::default(),
-        backend_options: Default::default()
+        backend_options: Default::default(),
     };
     let instance = Instance::new(&wids);
     // let instance = Instance::default();
-    let w =  Rc::clone(&window);
+    let w = Rc::clone(&window);
     let surface = instance.create_surface(w).unwrap();
     let adapter = instance
         .request_adapter(&RequestAdapterOptions {
@@ -45,7 +53,7 @@ pub async fn create_graphics(window: Rc<Window>, proxy: EventLoopProxy<Graphics>
         .expect("Failed to get device");
 
     // Get physical pixel dimensiosn inside the window
-    let size = window.inner_size();
+    let size = window.outer_size();
     // Make the dimensions at least size 1, otherwise wgpu would panic
     let width = size.width.max(1);
     let height = size.height.max(1);
@@ -67,7 +75,8 @@ pub async fn create_graphics(window: Rc<Window>, proxy: EventLoopProxy<Graphics>
         render_pipeline,
     };
 
-    let _ = proxy.send_event(gfx);
+    sender.send(gfx).unwrap();
+    proxy.wake_up();
 }
 
 fn create_pipeline(device: &Device, swap_chain_format: TextureFormat) -> RenderPipeline {
@@ -101,7 +110,7 @@ fn create_pipeline(device: &Device, swap_chain_format: TextureFormat) -> RenderP
 
 #[derive(Debug)]
 pub struct Graphics {
-    window: Rc<Window>,
+    window: Rc<Box<dyn Window>>,
     instance: Instance,
     surface: Surface<'static>,
     surface_config: SurfaceConfiguration,
